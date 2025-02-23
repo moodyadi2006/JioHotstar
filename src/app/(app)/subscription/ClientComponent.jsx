@@ -91,12 +91,21 @@ const ClientComponent = ({ token }) => {
   }
 
   const handlePayment = async () => {
+    if(!token){
+       toast({
+        title: "Login First",
+        description: "You can only enjoy top-notch unlimited content if you are logged in",
+        variant: "destructive",
+      });
+      return ;
+    }
     if (planPurchase === "None" || timePeriod === "None") {
       toast({
         title: "Please select a valid Plan",
         description: "Select time period as well as Plan",
         variant: "destructive",
       });
+      return ;
     }
     try {
       const response = await axios.post("/api/checkout", {
