@@ -37,9 +37,8 @@ const VerifyAccount = () => {
         username: params.username,
         verifyCode: data.verifyCode,
       });
-      console.log(response);
       toast({
-        title: "Success",
+        title: "Successfuly Verified",
         description: response.data.messsage,
       });
       router.replace("/");

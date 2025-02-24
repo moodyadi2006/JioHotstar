@@ -12,6 +12,7 @@ const Page = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const params = useParams();
+  
   useEffect(() => {
     setLoading(true);
     const decodedName = decodeURIComponent(params.name);

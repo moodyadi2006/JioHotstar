@@ -7,18 +7,29 @@ const ClientComponent = ({ token }) => {
   const [planPurchase, setPlanPurchase] = useState("None");
   const [timePeriod, setTimePeriod] = useState("None");
   const [amount, setAmount] = useState(0);
+  const fetchPaymentStatus = async (orderId) => {
+    let expiryDate = new Date();
+    if (timePeriod === "Quarterly") {
+      expiryDate.setMonth(expiryDate.getMonth() + 3);
+    } else if (timePeriod === "Yearly") {
+      expiryDate.setFullYear(expiryDate.getFullYear() + 1);
+    } else if (timePeriod === "Monthly") {
+      expiryDate.setMonth(expiryDate.getMonth() + 1);
+    }
 
-  const fetchPaymentStatus = async () => {
     const response = await axios.patch("/api/updateUserAccount", {
       planPurchase: planPurchase,
       timePeriod: timePeriod,
       email: token.email,
+      orderId: orderId,
+      orderExpiry: expiryDate,
     });
+
     toast({
-      title: response.message.data,
-      description: "Now make your entertainment journey limitless"
+      title: response.data.message,
+      description: "You can make your entertainment journey limitless after re-login",
     });
-  }
+  };
 
   const handlePlanPurchase = (plan) => {
     setPlanPurchase(plan);
@@ -91,13 +102,35 @@ const ClientComponent = ({ token }) => {
   }
 
   const handlePayment = async () => {
+    if (!token) {
+      toast({
+        title: "Please Login first...",
+        description: "You have to login to buy a plan",
+        variant: "destructive",
+      });
+      return;
+    }
     if (planPurchase === "None" || timePeriod === "None") {
       toast({
         title: "Please select a valid Plan",
         description: "Select time period as well as Plan",
         variant: "destructive",
       });
+      return;
     }
+    const now = Date.now();
+    const orderExpiryTimestamp = new Date(token.orderExpiry).getTime();
+
+    if (orderExpiryTimestamp > now) {
+      toast({
+        title: "You have already subscribed",
+        description:
+          "You cannot buy another plan if already subscribed to one. Wait until your current plan expires",
+        variant: "destructive",
+      });
+      return;
+    }
+
     try {
       const response = await axios.post("/api/checkout", {
         amount: amount,
@@ -123,7 +156,7 @@ const ClientComponent = ({ token }) => {
                   res.data.message +
                   ", You have successfuly subscribed to JioHotstar",
               });
-              fetchPaymentStatus();
+              fetchPaymentStatus(order.id);
             }
           });
         },

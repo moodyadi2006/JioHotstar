@@ -20,7 +20,7 @@ const userSchema = new Schema({
       /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
       "Please use a valid email",
     ],
-    unnique: true,
+    unique: true,
   },
   password: {
     type: String,
@@ -39,6 +39,14 @@ const userSchema = new Schema({
     type: String,
     enum: ["None", "Quarterly", "Yearly", "Monthly"],
     default: "None",
+  },
+  orderId: {
+    type: String,
+    default: "None",
+  },
+  orderExpiry: {
+    type: Date,
+    default: new Date("2025-02-23T00:00:00Z"), 
   },
   verifyCode: {
     type: String,

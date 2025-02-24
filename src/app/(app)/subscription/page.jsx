@@ -28,9 +28,12 @@ const Page = async () => {
             English
           </button>
           {!token && (
-            <button className="bg-gradient-to-r from-blue-600 to-pink-600 px-4 py-2 mr-14 rounded-xl hover:opacity-90 transition duration-200">
+            <Link
+              href="/profile"
+              className="bg-gradient-to-r from-blue-600 to-pink-600 px-4 py-2 mr-14 rounded-xl hover:opacity-90 transition duration-200"
+            >
               Login
-            </button>
+            </Link>
           )}
         </div>
       </header>

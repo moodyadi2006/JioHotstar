@@ -52,10 +52,12 @@ export async function POST(request) {
         await newUser.save();
       } catch (error) {
         console.error("Error saving user:", error);
-        // Handle the error appropriately
+        return Response.json(
+          { success: false, message: error.message },
+          { status: 410 }
+        );
       }
     }
-    //send verification email
     const emailResponse = await sendVerificationEmail(
       email,
       username,

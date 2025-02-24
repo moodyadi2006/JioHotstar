@@ -3,8 +3,8 @@ import UserModel from "@/model/User";
 
 export async function PATCH(request) {
   const body = await request.json();
-  const { planPurchase, timePeriod, email } = body;
-  console.log(planPurchase, timePeriod, email);
+  const { planPurchase, timePeriod, email, orderId, orderExpiry } = body;
+  console.log(orderExpiry, orderId);
   await dbConnect();
   try {
     const user = await UserModel.findOne({ email });
@@ -19,6 +19,8 @@ export async function PATCH(request) {
     }
     user.planPurchase = planPurchase;
     user.timePeriod = timePeriod;
+    user.orderId = orderId;
+    user.orderExpiry = orderExpiry;
     await user.save();
     return Response.json(
       {

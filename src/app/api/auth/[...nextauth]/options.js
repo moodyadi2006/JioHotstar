@@ -4,7 +4,7 @@ import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/model/User";
-import bcrypt from 'bcryptjs'
+import bcrypt from "bcryptjs";
 
 export const authOptions = {
   providers: [
@@ -74,6 +74,8 @@ export const authOptions = {
         session.user.planPurchase = token.planPurchase;
         session.user.timePeriod = token.timePeriod;
         session.user.watchList = token.watchList;
+        session.user.orderId = token.orderId;
+        session.user.orderExpiry = token.orderExpiry;
       }
       return session;
     },
@@ -86,6 +88,8 @@ export const authOptions = {
         token.planPurchase = user.planPurchase;
         token.timePeriod = user.timePeriod;
         token.watchList = user.watchList;
+        token.orderId = user.orderId;
+        token.orderExpiry = user.orderExpiry;
       }
       return token;
     },
